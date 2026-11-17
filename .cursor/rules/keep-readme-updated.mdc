@@ -1,0 +1,36 @@
+---
+description: Keep README.md updated when tektonize program logic or CLI behavior changes
+alwaysApply: true
+---
+
+# Keep README.md Updated
+
+`README.md` (repo root) is the human-facing contract for this tool. When you change program logic, update it in the **same** change set.
+
+## When you must update the README
+
+Update relevant README sections if you change any of:
+
+- Conversion pipeline stages or their meaning (`01_raw_ast` … `05_final`)
+- CLI commands, flags, or defaults (e.g. `--output-dir`)
+- Output directory layout or report/manifest files
+- Tekton models users care about (`TaskDefinition`, `PipelineFragment`, `ParamSchema`)
+- Install / quick-start steps that affect the TL;DR path
+- Scripted vs Declarative support claims
+
+## What to update
+
+- **TL;DR** — keep the shortest path accurate
+- **How Conversion Works** — keep the mermaid flowchart and links to `docs/`
+  aligned with the real pipeline; put step implementation detail in `docs/`,
+  not in the README
+- **Usage** / Makefile examples — match real CLI defaults and flags
+- **What It Does** — if artifact shapes or incompleteness guarantees change
+
+## What not to do
+
+- Do not ship logic-only PRs that leave README describing old stages, defaults, or outputs
+- Do not invent README features that the code does not implement
+- Do not re-introduce long per-transformer / parse-diagnostic implementation
+  sections into the README — those belong in `docs/`
+- Pure refactors with no user-visible behavior change do not require README edits

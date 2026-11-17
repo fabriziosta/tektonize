@@ -1,0 +1,45 @@
+---
+description: Keep docs conversion-step markdown in sync when pipeline logic changes
+alwaysApply: true
+---
+
+# Keep docs/ Updated
+
+`docs/` is the detailed design contract for each conversion step.
+When you change conversion logic, update the matching markdown file(s) in the
+**same** change set. Do not leave design docs describing old stages, outputs,
+or semantics.
+
+## Document map
+
+| Logic area | Design doc |
+|------------|------------|
+| File discovery / test exclusion | `docs/00_discovery.md` |
+| tree-sitter CST dump, parse diagnostics | `docs/01_raw_ast.md` |
+| Typed AST extraction / fallback parser | `docs/02_typed_ast.md` |
+| Name/type/class/expression/method/import/Jenkins DSL transformers | `docs/03_transformed.md` |
+| `PythonEmitter` / raw `.py` output | `docs/04_emitted.md` |
+| black, `__init__.py`, compile check, reports | `docs/05_final.md` |
+| Stage index, glossary (AST/CST/… ) | `docs/README.md` |
+
+## When you must update design docs
+
+Update the relevant file(s) if you change any of:
+
+- What a stage reads, writes, or means (`01_raw_ast` … `05_final`, or discovery)
+- Soft vs hard failure rules for a stage
+- Transformer / emitter / parser behavior that the step doc describes
+- Intermediate artifact shapes (stage JSON dumps, `conversion_report.yaml` error fields, etc.)
+- Acronyms or glossary terms used in the pipeline (AST, CST, DSL, …)
+- Adding, renaming, removing, or reordering pipeline steps
+
+Also update `docs/README.md` (index table and glossary) when the set of
+steps or shared terms changes.
+
+## What not to do
+
+- Do not invent stage behavior in design docs that the code does not implement
+- Do not only update the root `README.md` and skip `docs/` when step
+  semantics change (update both when both are affected)
+- Pure refactors with no behavioral or artifact change do not require design-doc edits
+- Historical plans under `.cursor/plans/` are not a substitute for `docs/`

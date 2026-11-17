@@ -1,0 +1,39 @@
+---
+description: Always add tests for fixed issues in tektonize (no fix without a regression test)
+alwaysApply: true
+---
+
+# Always Add Tests for Fixed Issues
+
+**Hard rule for tektonize:** every bugfix, diagnostic false-positive fix,
+emit/compile fix, or other conversion defect must ship with a **regression test
+in the same change**. No exceptions for “small” or “obvious” fixes.
+
+A change that only patches production code without a test that would fail if the
+bug returned is incomplete — add the test before finishing.
+
+## Required
+
+- Cover the **exact failure mode** that was fixed (minimal Groovy/Python snippet
+  or fixture is enough — prefer small focused cases over huge library dumps).
+- Prefer `tests/test_regression_parse.py` for parse/CST/report regressions; use
+  the nearest existing module (`test_transformers.py`, `test_e2e.py`, …) when
+  that is clearly a better fit.
+- Name or docstring the test so it records *what used to break* (e.g. empty map
+  `[:]`, optional `;`, nested ERROR noise).
+- Assert observable behavior (diagnostics, emitted Python, `py_compile`, stage
+  `conversion_report.yaml` shape) rather than private implementation details.
+- Run `make test` (or targeted pytest) and confirm the new test passes with the
+  fix and would catch a revert of the fix.
+
+## Do not
+
+- Ship a fix with only manual verification and no automated coverage
+- Delete or weaken a regression test to make an unrelated change pass
+- Rely solely on converting a private full shared library as the only check
+
+## Related
+
+- Pipeline stage semantics: update `docs/` per `keep-docs-updated.mdc`
+- User-facing behavior: update `README.md` per `keep-readme-updated.mdc`
+- Also listed in `AGENTS.md` (item 8 under “Before You Change Anything”)

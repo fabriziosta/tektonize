@@ -1,0 +1,6 @@
+# Example DSL hints overlay (synthetic names only).
+# Pass with: tektonize convert --dsl-hints examples/dsl-hints.example.yaml ...
+# Hints refine TEKTONIZE-TODO message text; they do not change matching.
+withCustomSshAgent: "withCustomSshAgent -> Tekton SSH credential / ssh-agent sidecar"
+shQuietWithEnv: "shQuietWithEnv -> TaskStep with env bindings"
+stageWrapper: "stageWrapper -> Tekton task / stage boundary"
